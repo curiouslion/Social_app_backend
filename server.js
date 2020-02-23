@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const app = express();
 const users = require("./routes/api/users");
 const auth = require("./routes/api/auth");
+const profile = require("./routes/api/profile");
 
 // app.use(express.json());
 app.use(express.json({ extended: false }));
@@ -11,13 +12,15 @@ mongoose
   .connect("mongodb://localhost/devJoin", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true
+    useCreateIndex: true,
+    useFindAndModify:false
   })
   .then(() => console.log("Connected to MongoDB..."))
   .catch(err => console.error("Could not connect to MongoDB..."));
 
 app.use("/api/users", users);
 app.use("/api/auth", auth);
+app.use("/api/profile", profile);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Listening on port ${port}`));
