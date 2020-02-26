@@ -6,7 +6,7 @@ const User = require("../../modals/User");
 const Profile = require("../../modals/Profile");
 
 // @route    GET api/profile/me
-// @desc     Get current users profile
+// @desc     Get current user's profile
 // @access   Private
 router.get("/me", auth, async (req, res) => {
   try {
@@ -100,7 +100,7 @@ router.post(
       }
       // Create profile
 
-      profile = await new Profile(profileFields);
+      profile = new Profile(profileFields);
       await profile.save();
       res.json(profile);
     } catch (err) {
@@ -134,12 +134,12 @@ router.get("/user/:user_id", async (req, res) => {
       user: req.params.user_id
     }).populate("user", ["name", "avatar"]);
 
-    if (!profile) return res.status(400).json({ msg: "Profile no found" });
+    if (!profile) return res.status(404).json({ msg: "Profile not found" });
     res.json(profile);
   } catch (err) {
     console.error(err.message);
-    if (err.kind == "ObjectId")
-      return res.status(400).json({ msg: "Profile no found" });
+    if (err.kind === "ObjectId")
+      return res.status(404).json({ msg: "Profile not found" });
     res.status(500).send("Server Error");
   }
 });
