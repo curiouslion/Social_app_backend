@@ -1,23 +1,16 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const app = express();
 const users = require("./routes/api/users");
 const auth = require("./routes/api/auth");
 const profile = require("./routes/api/profile");
 const posts = require("./routes/api/posts");
+const connectDB = require('./config/db')
 
 // app.use(express.json());
 app.use(express.json({ extended: false }));
 
-mongoose
-  .connect("mongodb://localhost/devJoin", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify:false
-  })
-  .then(() => console.log("Connected to MongoDB..."))
-  .catch(err => console.error("Could not connect to MongoDB..."));
+// connect database
+connectDB();
 
 app.use("/api/users", users);
 app.use("/api/auth", auth);
